@@ -1,0 +1,99 @@
+<section>
+    <div class="container">
+        <div class="row extra-mrg">
+            <div class="wrap-search-filter">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="">Órganos que administran</label>
+                        <select wire:model="organo_id" class="form-control">
+                            <option value="default">Todos</option>
+                            @foreach ($organos as $organo)
+                            <option value="{{ $organo->id }}">{{ $organo->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="">Procesos</label>
+                        <select wire:model="proceso_id" class="form-control">
+                            <option value="default">Todos</option>
+                            @foreach ($procesos as $proceso)
+                            <option value="{{ $proceso->id }}">{{ $proceso->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="">Tipos</label>
+                        <select wire:model="tipo_id" class="form-control">
+                            <option value="default">Todos</option>
+                            @foreach ($tipos as $tipo)
+                            <option value="{{ $tipo->id }}">{{ $tipo->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="">Es vigente</label>
+                        <select class="form-control" wire:model="es_vigente">
+                            <option value="default">Todos</option>
+                            <option value="1">Vigente</option>
+                            <option value="0">No vigentes</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="form-group">
+                        <input wire:model="search" type="text" class="form-control" placeholder="Buscar">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <button wire:click="limpiarFiltros" type="button" class="btn btn-primary btn-block">
+                        Limpiar filtros
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped table-inverse table-bordered">
+                <thead class="thead-inverse">
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Versión</th>
+                        <th>Fecha de aprobación</th>
+                        <th>Resolución</th>
+                        <th>Vigente </th>
+                        <th>PDF</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($documentos as $documento)
+                    <tr>
+                        <td>
+                            {{-- {{ route('documento.detalle', $documento) }} --}}
+                            <a href="#" wire:click.prevent="CambiarModo('documento_detalle', {{ $documento->id }})">
+                                {{ $documento->description }}
+                            </a>
+                        </td>
+                        <td>{{ $documento->version }}</td>
+                        <td>{{ $documento->fecha_de_aprobacion ? $documento->fecha_de_aprobacion->format('d/m/Y') : null
+                            }}</td>
+                        <td>{{ $documento->resolucion_documentos }}</td>
+                        <td>{{ $documento->estado_vigente }}</td>
+                        <td>
+                            <button wire:click.prevent="downloadDocument({{ $documento->id }})" class="btn btn-primary">
+                                <i class="ti-cloud-down"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        {{ $documentos->links() }}
+
+    </div>
+</section>
